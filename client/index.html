@@ -4,10 +4,20 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="google-signin-client_id" content="862970043761-20gvg559091uv6duj442i64v3d6qra1u.apps.googleusercontent.com">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
         <link rel="shortcut icon" href="https://image.flaticon.com/icons/png/512/32/32329.png">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <style>
+            .g-signin2{
+            width: 100%;
+            }
+            .g-signin2 > div{
+            margin: 0 auto;
+            }
+        </style>
         <title>Fort-List</title>
     </head>
     <body>
@@ -16,7 +26,7 @@
     <div class="container d-flex justify-content-center">
     
             <form class="col-md-5 login-form-1 bg-dark" style="margin-top:100px" id="loginForm">
-                <h2>Fort-List</h2>
+                <h2 class="text-center" style="color:lightgrey">Fort-List</h2><br>
                     <div class="form-group">
                         <input name="email" type="text" class="form-control" placeholder="Your Email *" value="" required/>
                     </div>
@@ -27,7 +37,12 @@
                         <input type="submit" class="btnSubmit" value="Login" id="loginButton"/>
                     </div>
                     <div class="form-group" style="text-align:center">
-                        <label>Not registered yet ?</label>
+                        <label style="color:lightgreen">Log In with Another Account</label>
+                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                        <br>
+                    </div>
+                    <div class="form-group" style="text-align:center">
+                        <label style="color:lightgreen">Not registered yet ?</label>
                         <br>
                         <a href="" style="color:white" id="registerLink"><h6>Register</h6></a>
                     </div>
@@ -38,7 +53,7 @@
             <div class="container d-flex justify-content-center">
             
               <form class="col-md-5 login-form-1 bg-dark" style="margin-top:100px" id="registerForm">
-                  <h2>Fort-List</h2>
+                  <h2 class="text-center" style="color:lightgrey">Fort-List</h2><br>
                       <div class="form-group">
                           <input name="name" type="text" class="form-control" placeholder="Your Name *" value="" />
                       </div>

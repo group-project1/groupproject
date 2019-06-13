@@ -1,6 +1,8 @@
 const User = require('../models/user')
 const {compare} = require('../helpers/bcrypt')
 const {sign} = require('../helpers/jwt')
+const {OAuth2Client} = require('google-auth-library')
+const client = new OAuth2Client("862970043761-20gvg559091uv6duj442i64v3d6qra1u.apps.googleusercontent.com ")
 
 class UserController{
     
@@ -43,15 +45,14 @@ class UserController{
                 console.log('ini user',user);
                 if(compare(req.body.password,user.password)){
                     let payload = {
-                        email : user.email,
                         id : user.id,
-                        name: user.name
+                        name: user.name,
+                        email : user.email
                     }
                     let token = sign(payload)
                     res.status(200).json({
                         token,
-                        firstName : user.firstName,
-                        lastName : user.lastName,
+                        name : user.name,
                         email : user.email,
                         id : user.id
                     })
@@ -70,6 +71,48 @@ class UserController{
     }
 
     static loginGoogle(req,res,next){
+        client
+        .verifyIdToken({
+            idToken: req.body.idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        })
+        .then(function(ticket){
+            console.log(ticket)
+            const { email, name, picture } = ticket.getPayload()
+            
+            let password= name+'fort-list'
+            let newUser={
+                name: name,
+                email: email,
+                password: password
+            }
+            User.findOne({email: email})
+            .then(user=>{
+                if(user){
+                    let payload = {
+                        id : user.id,
+                        name: user.name,
+                        email : user.email
+                    }
+                    let token = sign(payload)
+                    res.status(200).json({ email, name, picture, token })
+                }else{
+                    User.create(newUser)
+                    .then(user=>{
+                        let payload = {
+                            id : user.id,
+                            name: user.name,
+                            email : user.email
+                        }
+                        let token = sign(payload)
+                        res.status(200).json({ email, name, picture, token })
+                    })
+                    .catch(next)  
+                }
+            })
+            .catch(next)
+        })
+        .catch(next)
 
     }
 

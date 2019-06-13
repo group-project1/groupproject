@@ -71,5 +71,35 @@ $(document).ready(function() {
     })
   });
 
+  function onSignIn(googleUser) {
+    const idToken= googleUser.getAuthResponse().id_token
+     $.ajax({
+        url: `${baseUrl}/users/loginGoogle`,
+        type: 'post',
+        dataType: 'json',
+        data:{idToken}
+     })
+     .done(function(Data){
+       console.log(Data)
+      localStorage.setItem('token', Data.token)
+      localStorage.setItem('name', Data.name)
+     })
+     .fail(function(err){
+      console.log(err)
+   
+     })
+  }
 
+  function logout(){
+    localStorage.clear()
+    const auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut()
+    .then(function(){
+      console.log('User signed out')
+    })
+    .catch(function(err){
+      console.log(err)
+    })
+  }
+  
 
