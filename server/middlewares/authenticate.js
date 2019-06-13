@@ -15,9 +15,7 @@ module.exports = function(req,res,next){
             }
         })
         .catch(next)
-        // console.log('ini decoded',decoded);
-        // req.loggedUser = decoded
-        // console.log(req.loggedUser)
+
     }
     else{
         next({msg : `you need to login first`, code: 401})
