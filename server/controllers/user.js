@@ -1,4 +1,6 @@
 const User = require('../models/user')
+const {compare} = require('../helpers/bcrypt')
+const {sign} = require('../helpers/jwt')
 
 class UserController{
     
@@ -22,8 +24,7 @@ class UserController{
 
     static register(req,res,next){
         let user = new User({
-            firstName : req.body.firstName,
-            lastName: req.body.lastName,
+            name : req.body.name,
             email: req.body.email,
             password: req.body.password
         })
@@ -43,7 +44,8 @@ class UserController{
                 if(compare(req.body.password,user.password)){
                     let payload = {
                         email : user.email,
-                        id : user.id
+                        id : user.id,
+                        name: user.name
                     }
                     let token = sign(payload)
                     res.status(200).json({

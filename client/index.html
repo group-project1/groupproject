@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
+        <link rel="shortcut icon" href="https://image.flaticon.com/icons/png/512/32/32329.png">
+        <title>Fort-List</title>
+    </head>
+    <body>
+        <!-- <login-form/> -->
+
+    <div class="container d-flex justify-content-center">
+    
+            <form class="col-md-5 login-form-1 bg-dark" style="margin-top:100px" id="loginForm">
+                <h2>Fort-List</h2>
+                    <div class="form-group">
+                        <input name="email" type="text" class="form-control" placeholder="Your Email *" value="" required/>
+                    </div>
+                    <div class="form-group">
+                        <input name="password" type="password" class="form-control" placeholder="Your Password *" value="" required/>
+                    </div>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="submit" class="btnSubmit" value="Login" id="loginButton"/>
+                    </div>
+                    <div class="form-group" style="text-align:center">
+                        <label>Not registered yet ?</label>
+                        <br>
+                        <a href="" style="color:white" id="registerLink"><h6>Register</h6></a>
+                    </div>
+            </form>
+          </div>
+            <!-- <register-form/> -->
+      
+            <div class="container d-flex justify-content-center">
+            
+              <form class="col-md-5 login-form-1 bg-dark" style="margin-top:100px" id="registerForm">
+                  <h2>Fort-List</h2>
+                      <div class="form-group">
+                          <input name="name" type="text" class="form-control" placeholder="Your Name *" value="" />
+                      </div>
+                      <div class="form-group">
+                          <input name="email" type="text" class="form-control" placeholder="Your Email *" value="" />
+                      </div>
+                      <div class="form-group">
+                          <input name="password" type="password" class="form-control" placeholder="Your Password *" value="" />
+                      </div>
+                      <div class="form-group d-flex justify-content-center">
+                          <input type="submit" class="btnSubmit" value="Register" id="registerButton"/>
+                      </div>
+                      <div class="form-group d-flex justify-content-center">
+                          <a href="" style="color:white" id="backtologin">Back to login screen</a>
+                      </div>
+              </form>
+            </div>
+        <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="./js/index.js"></script>
+    </body>
+</html>
