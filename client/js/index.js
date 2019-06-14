@@ -13,8 +13,10 @@ function hasLogin () {
   $('#registerForm').hide()
   $('#loggedEmail').empty()
   $('#loggedEmail').append(`${localStorage.name}`)
-  fetchWishlist(true)
   $('#main').fadeIn()
+  fetchWishlist(true)
+  fetchItems()
+  fetchNews()
 }
 
 function hasLogout () {
@@ -437,8 +439,6 @@ $(document).ready(function() {
     console.log('ready!')
 
     isLoggedIn()
-    fetchItems()
-    fetchNews()
 
     $('#register').submit(function (event) {
       event.preventDefault()
