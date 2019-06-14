@@ -1,68 +1,185 @@
 <!DOCTYPE html>
-<html lang="en" style="height:100%">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet">
-        <link rel="shortcut icon" href="https://image.flaticon.com/icons/png/512/32/32329.png">
-        <title>Fort-List</title>
-    </head>
-    <body>
-        <!-- <login-form/> -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+  <link rel="shortcut icon" type="image/svg" href="https://purepng.com/public/uploads/large/purepng.com-fortnite-logo-black-and-whitefortnitefortnite-battle-royalegameslogos-691522709171yxrho.png" />
+  <title>Fort-List</title>
+  <style>
+    html{scroll-behavior:smooth}
 
-    <div class="container d-flex justify-content-center">
-    
-            <form class="col-md-5 login-form-1 bg-dark" style="margin-top:100px" id="loginForm">
-                <h2>Fort-List</h2>
-                    <div class="form-group">
-                        <input name="email" type="text" class="form-control" placeholder="Your Email *" value="" required/>
-                    </div>
-                    <div class="form-group">
-                        <input name="password" type="password" class="form-control" placeholder="Your Password *" value="" required/>
-                    </div>
-                    <div class="form-group d-flex justify-content-center">
-                        <input type="submit" class="btnSubmit" value="Login" id="loginButton"/>
-                    </div>
-                    <div class="form-group" style="text-align:center">
-                        <label>Not registered yet ?</label>
-                        <br>
-                        <a href="" style="color:white" id="registerLink"><h6>Register</h6></a>
-                    </div>
+    .carousel .carousel-item>img {
+    width: 200%;
+    margin-left: -105px;
+}
+  </style>
+</head>
+<body>
+
+  <div id="loginForm">
+    <main>
+      <center>
+        <h3><img class="animated infinite heartBeat delay-2s" src="https://gamepedia.cursecdn.com/fortnite_gamepedia/archive/6/64/20190303040235%21Favicon.ico" alt="" height="50px">    Fort-List</h3>        
+  
+        <!-- <h5 class="purple-text animated fadeIn delay-0.25s">Login into your account</h5> -->
+        <div class="section"></div>
+  
+        <div class="container animated fadeIn delay-0.25s">
+          <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+  
+            <form id="login" class="col s12">
+              <div class='row'>
+                <div class='col s12'>
+                </div>
+              </div>
+  
+              <div class='row'>
+                <div class='input-field col s12'>
+                  <input class='validate' required="" aria-required="true" type='email' name='email' id='email' />
+                  <label for='email'>Enter your email</label>
+                </div>
+              </div>
+  
+              <div class='row'>
+                <div class='input-field col s12'>
+                  <input class='validate' required="" aria-required="true" type='password' name='password' id='password' />
+                  <label for='password'>Enter your password</label>
+                </div>
+              </div>
+  
+              <br />
+              <center>
+                <div class='row'>
+                  <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect purple'>Login</button>
+                </div>
+              </center>
             </form>
           </div>
-            <!-- <register-form/> -->
-      
-            <div class="container d-flex justify-content-center">
-            
-              <form class="col-md-5 login-form-1 bg-dark" style="margin-top:100px" id="registerForm">
-                  <h2>Fort-List</h2>
-                      <div class="form-group">
-                          <input name="name" type="text" class="form-control" placeholder="Your Name *" value="" />
-                      </div>
-                      <div class="form-group">
-                          <input name="email" type="text" class="form-control" placeholder="Your Email *" value="" />
-                      </div>
-                      <div class="form-group">
-                          <input name="password" type="password" class="form-control" placeholder="Your Password *" value="" />
-                      </div>
-                      <div class="form-group d-flex justify-content-center">
-                          <input type="submit" class="btnSubmit" value="Register" id="registerButton"/>
-                      </div>
-                      <div class="form-group d-flex justify-content-center">
-                          <a href="" style="color:white" id="backtologin">Back to login screen</a>
-                      </div>
+        </div>
+        <a id="toRegister" class="animated fadeIn delay-0.25s" href="">Create account</a>
+      </center>
+    </main>
+  </div>
+
+  <div id="registerForm">
+      <main>
+        <center>
+          <h3><img class="animated infinite heartBeat delay-2s" src="https://gamepedia.cursecdn.com/fortnite_gamepedia/archive/6/64/20190303040235%21Favicon.ico" alt="" height="50px">    Fort-List</h3>        
+    
+          <!-- <h5 class="purple-text animated fadeIn delay-0.25s">Sign in to our app</h5> -->
+          <div class="section"></div>
+    
+          <div class="container animated fadeIn delay-0.25s">
+            <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+    
+              <form id="register" class="col s12">
+                <div class='row'>
+                  <div class='col s12'>
+                  </div>
+                </div>
+                
+                <div class='row'>
+                    <div class='input-field col s12'>
+                        <input required="" aria-required="true" type='text' name='name' id='newName' />
+                        <label for='email'>Enter your name</label>
+                    </div>
+                </div>
+
+                <div class='row'>
+                  <div class='input-field col s12'>
+                    <input class='validate' required="" aria-required="true" type='email' name='email' id='newEmail' />
+                    <label for='email'>Enter your email</label>
+                  </div>
+                </div>
+    
+                <div class='row'>
+                  <div class='input-field col s12'>
+                    <input class='validate' required="" aria-required="true" type='password' name='password' id='newPassword' />
+                    <label for='password'>Enter your password</label>
+                  </div>
+                </div>
+    
+                <br />
+                <center>
+                  <div class='row'>
+                    <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect purple'>Register</button>
+                  </div>
+                </center>
               </form>
             </div>
-        <script
-            src="https://code.jquery.com/jquery-3.4.1.min.js"
-            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-            crossorigin="anonymous">
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="./js/index.js"></script>
-    </body>
+          </div>
+          <a id="toLogin" class="animated fadeIn delay-0.25s" href="">Back to Login Screen</a>
+        </center>
+      </main>
+  </div>
+
+  <div id="main">
+
+    <nav>
+      <div class="nav-wrapper purple">
+        <a class="brand-logo" style="margin-left:20px"><img class="animated infinite heartBeat delay-2s" src="https://gamepedia.cursecdn.com/fortnite_gamepedia/archive/6/64/20190303040235%21Favicon.ico" alt="" height="30px">  Fort-List</a>
+        <div class="right" style="margin-right:20px">
+            <a style="margin-right: 20px" id="loggedEmail"></a>
+            <a id="logout" class="waves-effect waves-light btn-small grey">Logout</a>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="carousel" style="height:620px">
+        <div class="center">
+            <h3>Item List</h3>
+        </div>
+        <div id="itemCarousel">
+            
+        </div>
+    </div>
+    <div id="carouselMessage" class="center" style="margin-top:-80px; margin-bottom: 80px">
+    
+    </div>
+
+    <img id="carouselLoading" src="https://i.pinimg.com/originals/d9/93/3c/d9933c4e2c272f33b74ef18cdf11a7d5.gif" style="position: absolute; margin-top: -470px; left: 40%;">
+
+    <div id="toWishlist" style="height: 30px"></div>
+    
+    <div id="wishlistContainer" class="container" style="border: 3px solid purple; height: 600px">
+        <div class="center">
+            <h3>My Item Wishlist</h3>
+            
+        </div>
+    </div>
+    <div class="center" style="position:absolute; right: 60px; margin-top:-75px">
+        <a href="#toNews"><span>News</span><br><i class="fas fa-caret-square-down" style="font-size: 4em"></i></a>
+    </div>
+
+    <div id="toNews" style="border: 1px solid purple; height: 641px; margin-top: 70px; overflow-y: auto">
+        <div class="center">
+            <div class="center purple white-text" style="height:70px; position: absolute; z-index: 1; left: 0; right: 0;">
+                <h3 style="margin-top:5px">Fortnite News</h3>
+            </div>
+            <div style="height:70px"></div>
+            <div id="newsContainer" class="row">
+                <img id="newsLoading" src="https://i.pinimg.com/originals/d9/93/3c/d9933c4e2c272f33b74ef18cdf11a7d5.gif" width="40%" style="position: absolute; z-index: 1; margin-top: 150px; left: 30%;">
+                
+            </div>
+        </div>
+    </div>
+    
+    <footer class="purple" style="margin-top:0px; text-align: right">
+        <span style="margin-right: 10px; color: white">Ana, Rizky, Rizky - Fort-List ©2019</span>
+      </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.4.0.min.js"
+    integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+    crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="./js/index.js"></script>
+</body>
 </html>
