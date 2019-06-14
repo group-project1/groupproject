@@ -52,8 +52,7 @@ class UserController{
                     let token = sign(payload)
                     res.status(200).json({
                         token,
-                        firstName : user.firstName,
-                        lastName : user.lastName,
+                        name: user.name,
                         email : user.email,
                         id : user._id
                     })

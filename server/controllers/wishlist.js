@@ -4,7 +4,11 @@ class WishlistController{
 
     static getAll(req,res,next){
         Wishlist
-        .find({})
+        .find({userId: req.loggedUser.id},{},{
+            sort: {
+                _id: -1
+                }
+        })
         .then(data =>{
             res.status(200).json(data)
         })
@@ -22,22 +26,27 @@ class WishlistController{
 
     static create(req,res,next){
         console.log('masuk create');
-        
-        // console.log(req.body);
-        // console.log('ini logged user',req.loggedUser);
-        
-        let wishlist  = new Wishlist({
-            itemId : req.body.itemId,
-            itemName : req.body.itemName,
-            thumbnail: req.body.thumbnail,
-            price : req.body.price,
-            userId : req.loggedUser.id
-        })
-        wishlist.save()
-        .then(data =>{
-            res.status(200).json(data)
-        })
-        .catch(next)
+
+        Wishlist
+            .findOne({itemId: req.body.itemId, userId: req.loggedUser.id})
+            .then(found => {
+                if (found) {
+                    throw { code : 400, msg : `Item already added`}                    
+                } else{
+                    let wishlist  = new Wishlist({
+                        itemId : req.body.itemId,
+                        itemName : req.body.itemName,
+                        thumbnail: req.body.thumbnail,
+                        price : req.body.price,
+                        userId : req.loggedUser.id
+                    })
+                    return wishlist.save()
+                }
+            })
+            .then(data =>{
+                res.status(200).json(data)
+            })
+            .catch(next)
     }
 
     static update(req,res,next){

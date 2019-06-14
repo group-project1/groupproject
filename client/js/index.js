@@ -11,12 +11,15 @@ function isLoggedIn () {
 function hasLogin () {
   $('#loginForm').hide()
   $('#registerForm').hide()
+  $('#loggedEmail').empty()
   $('#loggedEmail').append(`${localStorage.name}`)
+  fetchWishlist(true)
   $('#main').fadeIn()
 }
 
 function hasLogout () {
   $('#loggedEmail').empty()
+  $('#wishlistCardContainer').empty()
   $('#main').hide()
   $('#registerForm').hide()
   $('#loginForm').fadeIn()
@@ -69,8 +72,8 @@ function register (newUser) {
     .done(function(success){
         console.log(success)
         let loginOption = {
-          email : email,
-          password: password
+          email : newUser.email,
+          password: newUser.password
         }
         login(loginOption)
       })
@@ -144,28 +147,211 @@ function addItem (itemId, name, thumbnail, price) {
   })
   .done(response =>{
     console.log(response);
+    fetchWishlist(false)
     location.href = "#toWishlist";
-      $("#wishlistCardContainer").append(
-        `<div id="${itemId}" class="card col s-3">
-        <div class="card-image">
-          <img src="${thumbnail}" width=200px height=150px>
-        </div>
-        <div class="card-stacked">
-          <div class="card-content" style="height:100px">
-            <span>${name}</span>
-            <span>${price}</span>
-          </div>
-          <div class="card-action">
-            <a href="#" target="_blank">detail</a>
-          </div>
-        </div>
-      </div>`
-      )
   })
-  .catch((jxHQR,status)=>{
+  .fail((jxHQR,status)=>{
     console.log(status);
+    Swal.fire({
+      type: 'error',
+      title: 'Oops...',
+      text: 'Item already added'
+    })
   })
   
+}
+
+function removeItem (id, img, name) {
+  event.preventDefault()
+  console.log(img)
+  Swal.fire({
+    imageUrl: img,
+    imageWidth: 200,
+    imageHeight: 200,
+    title: 'Delete this items?',
+    text: name,
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.value) {
+      $.ajax({
+        url : `${baseUrl}/wishlist/${id}`,
+        method : 'delete',
+        headers : {
+          token : localStorage.token
+        }
+      })
+        .done(response => {
+          console.log(response)
+          fetchWishlist(false)
+        })
+        .fail((jxHQR,status)=>{
+          console.log(status);
+        })
+      Swal.fire(
+        'Deleted!',
+        'Your file has been deleted.',
+        'success'
+      )
+    }
+  })
+}
+
+function fetchDetails (id) {
+  event.preventDefault()
+  Swal.fire({
+    imageUrl: 'https://www.justori.com/justori/assets/images/11.gif',
+    
+    position: 'center',
+    showConfirmButton: false
+  })
+  $.ajax({
+    url: `${baseUrl}/items/${id}`,
+    type: 'get',
+    headers: {
+      token: localStorage.token
+    }
+  })
+  .done(({data}) => {
+    console.log(data)
+    let item = data.item
+    $.ajax({
+      url: `https://www.googleapis.com/youtube/v3/search?part=id&q=fortnite ${item.name}&type=video&key=AIzaSyAgufyMDC_DB_DJufzI1ueBKtkMYTH_9C0`,
+      type: 'get'
+    })
+    .done(youtube => {
+      let videoId = youtube.items[0].id.videoId
+      Swal.fire({
+        html: `
+        <div class="row" style="height:500px">
+          <div class="col s5">
+            <div class="row" style="margin-top:20px">
+              <div class="col s12">
+                <div class="card">
+                  <div class="card-image">
+                    <img src="${item.images.icon}" width=200px>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col s7" style="">
+            <h2>${item.name.toUpperCase()}</h2>
+            <div class="row">
+              <div class="col s12">
+                <div class="card">
+                  <div class="row card-content" style="text-align:left">
+                    <div class="col s6">
+                      <h6>Type: ${item.type}</h6>
+                      <h6>Rarity: ${item.rarity}</h6>
+                      <h5>Price: ${item.cost}</h5>
+                    </div>
+                    <div class="col s6">
+                      <h4 style="margin-top:-5px">Rating</h4>
+                      <h6>avgStars:    ${item.ratings.avgStars}</h6>
+                      <h6>totalPoints: ${item.ratings.totalPoints}</h6>
+                      <h6>numberVotes: ${item.ratings.numberVotes}</h6>     
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <iframe width="420" height="245" src="https://www.youtube.com/embed/${videoId}" allowfullscreen="allowfullscreen"></iframe>
+        </div>
+        `,
+        showConfirmButton: false,
+        heightAuto: false,
+        width: 1100
+      })
+    })
+    .fail((jxHQR,status)=>{
+      console.log(status);
+    })
+  })
+  .fail(function(error){
+    console.log('kok error')
+  })
+  
+}
+
+function fetchWishlist (animate) {
+  $('#wishlistCardContainer').empty()
+  $.ajax({
+    url: `${baseUrl}/wishlist`,
+    type: 'get',
+    headers: {
+      token: localStorage.token
+    }
+  })
+    .done(function(data){
+      console.log(data)
+      if(data.length > 0) {
+        data.forEach(item => {
+          if (animate === true) {
+            $('#wishlistCardContainer').append(`
+              <div class="col s3 m3 animated fadeInUp delay-0.5s">
+                <div class="card hoverable">
+                  <div class="card-image">
+                    <a onclick="removeItem('${item._id}', '${item.thumbnail}', '${item.itemName}')" class="btn-small transparent" style="position:absolute; z-index:1; font-size:10px; color: red; top: 3px; right:3px; height:30px">
+                      <i class="fas fa-times"></i>
+                    </a>
+                    <img src="${item.thumbnail}" width=200px height=200px>
+                  </div>
+                  <div class="card-stacked" style="height:170px">
+                    <div class="card-action">
+                      <h5>${item.itemName}</h5>
+                      <h6>Price: ${item.price}</h6>
+                      <a class="waves-effect waves-light btn-small purple modal-trigger" onclick="fetchDetails('${item.itemId}')">Detail</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `)
+          } else {
+            $('#wishlistCardContainer').append(`
+            <div class="col s3 m3">
+              <div class="card hoverable">
+                <div class="card-image">
+                  <a onclick="removeItem('${item._id}', '${item.thumbnail}', '${item.itemName}')" class="btn-small transparent" style="position:absolute; z-index:1; font-size:10px; color: red; top: 3px; right:3px; height:30px">
+                    <i class="fas fa-times"></i>
+                  </a>
+                  <img src="${item.thumbnail}" width=200px height=200px>
+                </div>
+                <div class="card-stacked" style="height:150px">
+                  <div class="card-action">
+                    <h5>${item.itemName}</h5>
+                    <h6>Price: ${item.price}</h6>
+                    <a class="waves-effect waves-light btn-small purple modal-trigger" onclick="fetchDetails('${item.itemId}')">Detail</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `)
+          }
+        })
+      } else {
+        $('#wishlistCardContainer').append(`
+        <div style="margin-left:310px; margin-top:150px">
+          <div class="col s6 animated fadeIn">
+            <div class="card horizontal">
+              <div class="card-stacked">
+                <div class="card-content">
+                  <p>Wishlist empty,</p>
+                  <p>add some items first..</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        `)
+      }
+    })
+    .fail(function(error){
+      console.log('kok error')
+    })
+
 }
 
 function fetchItems () {
@@ -251,8 +437,6 @@ $(document).ready(function() {
     console.log('ready!')
 
     isLoggedIn()
-    // $('#loginForm').hide()
-    // $('#registerForm').hide()
     fetchItems()
     fetchNews()
 
