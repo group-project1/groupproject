@@ -102,14 +102,17 @@ function fetchItems () {
     .done(function({data}){
       for (let i = 0; i <= 100; i++) {
         $('#itemCarousel').append(`
-        <a class="carousel-item" href="" onclick="return addItem()" title="" style="margin-top: -100px"><img src="${data[i].item.images.information}"></a>
+        <div class="carousel-item" title="" style="margin-top: -100px">
+          <img src="${data[i].item.images.information}">
+          <a href="" onclick="return addItem()"><i class="fas fa-plus-circle" style="color:red; font-size:4em; position:absolute; z-index:1; margin-top:-385px; margin-left: 215px"></i></a>
+        </div>
 
         `)
       }
       $('#carouselLoading').hide()
       $('#carouselMessage').empty()
       $('#carouselMessage').append(`
-        <p>Click image for adding to wishlist!</p>
+        <p>Click <i class="fas fa-plus-circle" style="color:red"></i> for adding to wishlist!</p>
       `)
       $('.carousel').carousel();
     })
