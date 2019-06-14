@@ -1,17 +1,12 @@
-const mongoose = require("mongoose")
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 
 let wishlistSchema = new Schema({
+    itemId : String,
     itemName : String,
-    description : String,
-    thumbnail: String,
-    hover : String,
-    image : String,
+    thumbnail : String,
     price : String,
-    type : String,
-    rarity : String,
-    rating : Object,
     userId : String
 })
 

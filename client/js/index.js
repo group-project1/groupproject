@@ -9,15 +9,14 @@ function isLoggedIn () {
 }
 
 function hasLogin () {
-  console.log($('#artistName')[0].value) 
-  fetchFavorites()
   $('#loginForm').hide()
   $('#registerForm').hide()
-  $('#loggedEmail').append(`${localStorage.email}`)
+  $('#loggedEmail').append(`${localStorage.name}`)
   $('#main').fadeIn()
 }
 
 function hasLogout () {
+  $('#loggedEmail').empty()
   $('#main').hide()
   $('#registerForm').hide()
   $('#loginForm').fadeIn()
@@ -35,7 +34,7 @@ function logout() {
   }).then((result) => {
     if (result.value) {
       localStorage.removeItem('token')
-      localStorage.removeItem('username')
+      localStorage.removeItem('name')
       localStorage.removeItem('email')
       localStorage.removeItem('userId')
       Swal.fire({
@@ -44,13 +43,23 @@ function logout() {
         showConfirmButton: false,
         timer: 1000
       })
+      const auth2 = gapi.auth2.getAuthInstance();
+
+      auth2.signOut()
+      .then(function(){
+        console.log('User signed out')
+         hasLogout()
+      })
+      .catch(function(err){
+        console.log(err)
+      })
       hasLogout()
     }
   })
   
 }
 
-function registerold (newUser) {
+function register (newUser) {
   $.ajax({
     url: `${baseUrl}/users/register`,
     type: 'post',
@@ -70,7 +79,7 @@ function registerold (newUser) {
     })
 }
 
-function loginold (loginOption) {
+function login (loginOption) {
   $.ajax({
     url: `${baseUrl}/users/login`,
     type: 'post',
@@ -78,17 +87,85 @@ function loginold (loginOption) {
     data: loginOption
   })
     .done(function(Data){
-        console.log(Data)
-        localStorage.setItem('token', Data.token)
+      console.log(Data)
+      localStorage.setItem('token', Data.token)
+      localStorage.setItem('name', Data.name)
+      localStorage.setItem('email', Data.email)
+      localStorage.setItem('userId', Data.id)
+      hasLogin()
     })
     .fail(function(error){
       console.log(error)
     })
 }
 
-function addItem () {
-  location.href = "#toWishlist";
-  return false
+function onSignIn(googleUser) {
+
+  const idToken= googleUser.getAuthResponse().id_token
+
+   $.ajax({
+      url: `${baseUrl}/users/loginGoogle`,
+      type: 'post',
+      dataType: 'json',
+      data:{idToken}
+   })
+   .done(function(Data){
+     console.log(Data)
+     localStorage.setItem('token', Data.token)
+     localStorage.setItem('name', Data.name)
+     localStorage.setItem('email', Data.email)
+     localStorage.setItem('userId', Data.id)
+     hasLogin()
+   })
+
+   .fail(function(err){
+    console.log(err)
+
+   })
+
+}
+
+function addItem (itemId, name, thumbnail, price) {
+  event.preventDefault()
+  console.log('masuk',itemId, name, thumbnail, price);
+
+  $.ajax({
+    url : `${baseUrl}/wishlist`,
+    method : 'post',
+    data : {
+      itemId : itemId,
+      itemName : name,
+      thumbnail : thumbnail,
+      price : price
+    },
+    headers : {
+      token : localStorage.token
+    }
+  })
+  .done(response =>{
+    console.log(response);
+    location.href = "#toWishlist";
+      $("#wishlistCardContainer").append(
+        `<div id="${itemId}" class="card col s-3">
+        <div class="card-image">
+          <img src="${thumbnail}" width=200px height=150px>
+        </div>
+        <div class="card-stacked">
+          <div class="card-content" style="height:100px">
+            <span>${name}</span>
+            <span>${price}</span>
+          </div>
+          <div class="card-action">
+            <a href="#" target="_blank">detail</a>
+          </div>
+        </div>
+      </div>`
+      )
+  })
+  .catch((jxHQR,status)=>{
+    console.log(status);
+  })
+  
 }
 
 function fetchItems () {
@@ -100,13 +177,28 @@ function fetchItems () {
     type: 'get'
   })
     .done(function({data}){
-      console.log(data);
-      
       for (let i = 0; i <= 100; i++) {
+        let dataCard = {
+          itemId : data[i].itemId,
+          userId : localStorage.userId,
+          itemName : data[i].item.name,
+          description : data[i].item.description,
+          thumbnail : data[i].item.images.background,
+          hover : data[i].item.images.featured,
+          image : data[i].item.images.icon,
+          price : data[i].item.cost,
+          type : data[i].item.type,
+          rarity : data[i].item.rarity,
+          rating : data[i].item.rating
+        }
+        // console.log(dataCard);
+        // let passData = JSON.stringify(dataCard)
+        // console.log('passData', passData);
+
         $('#itemCarousel').append(`
-        <div class="carousel-item" title="" style="margin-top: -100px">
+        <div id="${data[i].itemId}" class="carousel-item" title="" style="margin-top: -100px">
           <img src="${data[i].item.images.information}">
-          <a href="" onclick="return addItem()"><i class="fas fa-plus-circle" style="color:red; font-size:4em; position:absolute; z-index:1; margin-top:-385px; margin-left: 215px"></i></a>
+          <a href="#" onclick="addItem('${data[i].itemId}','${data[i].item.name}','${data[i].item.images.background}','${data[i].item.cost}');"><i class="fas fa-plus-circle" style="color:red; font-size:4em; position:absolute; z-index:1; margin-top:-385px; margin-left: 215px"></i></a>
         </div>
 
         `)
@@ -119,7 +211,7 @@ function fetchItems () {
       $('.carousel').carousel();
     })
     .fail(function(error){
-      console.log(error)
+      console.log('kok error')
     })
 }
 
@@ -158,9 +250,9 @@ function fetchNews () {
 $(document).ready(function() {
     console.log('ready!')
 
-    // isLoggedIn()
-    $('#loginForm').hide()
-    $('#registerForm').hide()
+    isLoggedIn()
+    // $('#loginForm').hide()
+    // $('#registerForm').hide()
     fetchItems()
     fetchNews()
 
@@ -168,12 +260,12 @@ $(document).ready(function() {
       event.preventDefault()
       let data = $(this).serializeArray()
       let newUser = {
-        username: data[0].value,
+        name: data[0].value,
         email: data[1].value,
         password: data[2].value,
       }
       console.log(newUser)
-      // register(username, email, password)
+       register(newUser)
     })
   
     $('#login').submit(function (event) {
@@ -184,7 +276,7 @@ $(document).ready(function() {
         password: data[1].value
       }
       console.log(loginOption)
-      // login(email, password)
+       login(loginOption)
     })
   
     $('#toRegister').click(() => {
@@ -205,29 +297,6 @@ $(document).ready(function() {
       logout()
     })
 
-    // $('#registerForm').submit(function(event){
-    //     event.preventDefault()
-    //     let data= $(this).serializeArray()
-    //     let newUser = {
-    //       name: data[0].value,
-    //       email: data[1].value,
-    //       password: data[2].value
-          
-    //     }
-    //     console.log(newUser)
-    //     register(newUser)
-    // })
-
-    // $('#loginForm').submit(function(event){
-    //     event.preventDefault()
-    //     let data= $(this).serializeArray()
-    //     let loginOption = {
-    //       email: data[0].value,
-    //       password: data[1].value
-    //     }
-    //     console.log(loginOption)
-    //     login(loginOption)
-    // })
   });
 
 
