@@ -100,6 +100,8 @@ function fetchItems () {
     type: 'get'
   })
     .done(function({data}){
+      console.log(data);
+      
       for (let i = 0; i <= 100; i++) {
         $('#itemCarousel').append(`
         <a class="carousel-item" href="" onclick="return addItem()" title="" style="margin-top: -100px"><img src="${data[i].item.images.information}"></a>
@@ -153,15 +155,6 @@ function fetchNews () {
 $(document).ready(function() {
     console.log('ready!')
 
-    // $('a.thumb').click(function(event){
-    //   event.preventDefault();
-    //   var content = $('.modal-body');
-    //   content.empty();
-    //     var title = $(this).attr("title");
-    //     $('.modal-title').html(title);        
-    //     content.html($(this).html());
-    //     $(".modal-profile").modal({show:true});
-    // });
     // isLoggedIn()
     $('#loginForm').hide()
     $('#registerForm').hide()
