@@ -21,17 +21,17 @@ class WishlistController{
     }
 
     static create(req,res,next){
+        console.log('masuk create');
+        
+        // console.log(req.body);
+        // console.log('ini logged user',req.loggedUser);
+        
         let wishlist  = new Wishlist({
+            itemId : req.body.itemId,
             itemName : req.body.itemName,
-            description : req.body.description,
             thumbnail: req.body.thumbnail,
-            hover : req.body.hover,
-            image : req.body.image,
             price : req.body.price,
-            type : req.body.type,
-            rarity : req.body.rarity,
-            rating : req.body.rating,
-            userId : req.body.userId
+            userId : req.loggedUser.id
         })
         wishlist.save()
         .then(data =>{
@@ -42,15 +42,11 @@ class WishlistController{
 
     static update(req,res,next){
         let setVal = {}
+        req.body.itemId && (setVal.itemId = req.body.itemId)
         req.body.itemName && (setVal.itemName = req.body.itemName)
         req.body.description && (setVal.description = req.body.description)
         req.body.thumbnail && (setVal.thumbnail = req.body.thumbnail)
-        req.body.hover && (setVal.hover = req.body.hover)
-        req.body.image && (setVal.image = req.body,image)
         req.body.price && (setVal.price = req.body.price)
-        req.body.type && (setVal.type = req.body.type)
-        req.body.rarity && (setVal.rarity = req.body.rarity)
-        req.body.rating && (setVal.rating = req.body.rating)
 
         Wishlist
         .findById(req.params.id)

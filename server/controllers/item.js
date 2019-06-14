@@ -25,6 +25,7 @@ class ItemController {
     })
       .then(({data}) => {
         res.status(200).json(data)
+        
       })
       .catch(next)
   }
