@@ -11,4 +11,4 @@ router.post('/',WishlistController.create)
 router.patch('/:id',WishlistController.update)
 router.delete('/:id',WishlistController.delete)
 
-module.exports = WishlistController
+module.exports = router

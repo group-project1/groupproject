@@ -1,6 +1,8 @@
 const User = require('../models/user')
 const {compare} = require('../helpers/bcrypt')
 const {sign} = require('../helpers/jwt')
+const {OAuth2Client} = require('google-auth-library')
+const client = new OAuth2Client("862970043761-20gvg559091uv6duj442i64v3d6qra1u.apps.googleusercontent.com ")
 
 class UserController{
     
@@ -44,7 +46,7 @@ class UserController{
                 if(compare(req.body.password,user.password)){
                     let payload = {
                         email : user.email,
-                        id : user.id,
+                        id : user._id,
                         name: user.name
                     }
                     let token = sign(payload)
@@ -53,7 +55,7 @@ class UserController{
                         firstName : user.firstName,
                         lastName : user.lastName,
                         email : user.email,
-                        id : user.id
+                        id : user._id
                     })
                 }else {
                     console.log('masuk error 1');
@@ -70,7 +72,65 @@ class UserController{
     }
 
     static loginGoogle(req,res,next){
+        client
+        .verifyIdToken({
+            idToken: req.body.idToken,
+            audience: "862970043761-20gvg559091uv6duj442i64v3d6qra1u.apps.googleusercontent.com",
+        })
 
+        .then(function(ticket){
+            console.log(ticket)
+            const { email, name, picture } = ticket.getPayload()
+
+            let password= name+'fort-list'
+            let newUser={
+                name: name,
+                email: email,
+                password: password
+            }
+
+            User.findOne({email: email})
+            .then(user=>{
+                if(user){
+                    console.log(user)
+                    let payload = {
+                        id : user._id,
+                        name: user.name,
+                        email : user.email
+                    }
+
+                    let token = sign(payload)
+                    res.status(200).json({
+                        token,
+                        name : user.name,
+                        email : user.email,
+                        id : user._id
+                    })
+
+                }else{
+                    User.create(newUser)
+                    .then(user=>{
+                        let payload = {
+                            id : user._id,
+                            name: user.name,
+                            email : user.email
+                        }
+
+                        let token = sign(payload)
+
+                        res.status(200).json({
+                            token,
+                            name : user.name,
+                            email : user.email,
+                            id : user._id
+                        })
+                    })
+                    .catch(next)  
+                }
+            })
+            .catch(next)
+        })
+        .catch(next)
     }
 
     static update(req,res,next){
